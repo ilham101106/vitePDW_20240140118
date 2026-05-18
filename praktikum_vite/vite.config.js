@@ -10,4 +10,5 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  base: '/vitePDW_20240140118/', // Tambahkan ini agar aset path-nya pas di GitHub Pages
 })

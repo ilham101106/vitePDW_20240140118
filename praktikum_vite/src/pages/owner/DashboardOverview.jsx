@@ -10,9 +10,9 @@ function DashboardOverview() {
   ];
 
   const recentTransactions = [
-    { id: 'TRX-004', time: '17:15', items: '2x Mie Dok-Dok, 1x Es Teh', total: 'Rp 41.000', status: 'Selesai' },
-    { id: 'TRX-003', time: '16:40', items: '1x Mie Nyemek Special, 1x Nutrisari', total: 'Rp 23.000', status: 'Selesai' },
-    { id: 'TRX-002', time: '16:12', items: '3x Indomie Goreng Jumbo, 3x Es Jeruk', total: 'Rp 66.000', status: 'Selesai' },
+    { id: 'TRX-004', time: '17:15', items: '1x Mie Ayam, 1x Es Teh', total: 'Rp 41.000', status: 'Selesai' },
+    { id: 'TRX-003', time: '16:40', items: '1x Kwetiau, 1x Es Jeruk', total: 'Rp 23.000', status: 'Selesai' },
+    { id: 'TRX-002', time: '16:12', items: '3x Mie Yamin, 3x Es Jeruk', total: 'Rp 66.000', status: 'Selesai' },
   ];
 
   return (
