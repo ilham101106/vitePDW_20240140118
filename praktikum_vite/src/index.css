@@ -1,0 +1,29 @@
+:root {
+  /* Palet Warna Wajib */
+  --blaze-orange: #ff5c14ff;
+  --princeton-orange: #ff8a1bff;
+  --gold: #fcd514ff;
+  --yellow-green: #98da00ff;
+  --lime-green: #1fd224ff;
+
+  /* Utility Background & Text */
+  --bg-dark: #121214;
+  --bg-light: #f4f5f7;
+  --card-bg: #ffffff;
+  --text-main: #212529;
+  --text-muted: #6c757d;
+  --border-color: #e9ecef;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  min-height: 100vh;
+}
