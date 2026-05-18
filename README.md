@@ -33,15 +33,17 @@ Aplikasi ini bakal nampilin halaman yang beda tergantung akun yang kamu pakai:
 ---
 * **Login sebagai OWNER:**
 <img width="687" height="813" alt="image" src="https://github.com/user-attachments/assets/4a7f61bb-8a53-4359-82b3-71be55a5907e" />
+
 * **HALAMAN OWNER:**
----
 <img width="1916" height="1072" alt="image" src="https://github.com/user-attachments/assets/84d49e2d-a087-4d0b-ad59-6233956ea776" />
 
 ---
 * **Login sebagai KASIR (Karyawan):**
 <img width="666" height="820" alt="image" src="https://github.com/user-attachments/assets/fb9587ac-b757-4068-946d-cc0106d00cd4" />
+
 * **HALAMAN KARYAWAN:**
 <img width="959" height="541" alt="image" src="https://github.com/user-attachments/assets/6a64a352-17f5-4728-b6e0-466bc76117b3" />
+---
 
 
 
