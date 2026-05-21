@@ -1,0 +1,59 @@
+@startuml MieAyamin_Use_Case
+
+' Mengatur layout agar memanjang dari kiri ke kanan
+left to right direction
+
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Kasir" as kasir
+actor "Owner" as owner
+
+rectangle "Aplikasi MieAyamin" {
+    
+    ' --- Use Cases Utama ---
+    usecase "Login Sistem" as UC_Login
+    usecase "Logout Sistem" as UC_Logout
+    
+    ' --- Fitur Kasir (Folder pages/kasir) ---
+    usecase "Input Transaksi (POS.jsx)" as UC_POS
+    usecase "Cetak Struk & Riwayat Harian" as UC_Struk
+    usecase "Input Feedback Customer\n(FeedbackCustomer.jsx)" as UC_Feedback
+    
+    ' --- Fitur Owner (Folder pages/owner) ---
+    usecase "Melihat Dashboard\n(DashboardOverview.jsx)" as UC_Dashboard
+    usecase "Kelola Data Karyawan\n(KaryawanManagement.jsx)" as UC_Karyawan
+    usecase "Melihat Laporan Penjualan\n(LaporanSells.jsx)" as UC_Laporan
+    usecase "Kelola Menu & Harga\n(Menu.jsx)" as UC_Menu
+
+    ' --- Relasi Include (Wajib Login dulu untuk akses fitur) ---
+    UC_POS ..> UC_Login : <<include>>
+    UC_Struk ..> UC_Login : <<include>>
+    UC_Feedback ..> UC_Login : <<include>>
+    
+    UC_Dashboard ..> UC_Login : <<include>>
+    UC_Karyawan ..> UC_Login : <<include>>
+    UC_Laporan ..> UC_Login : <<include>>
+    UC_Menu ..> UC_Login : <<include>>
+    
+    UC_Logout ..> UC_Login : <<include>>
+}
+
+' --- Hubungan Aktor ke Fitur ---
+
+' Akses Kasir
+kasir --> UC_Login
+kasir --> UC_POS
+kasir --> UC_Struk
+kasir --> UC_Feedback
+kasir --> UC_Logout
+
+' Akses Owner
+owner --> UC_Login
+owner --> UC_Dashboard
+owner --> UC_Karyawan
+owner --> UC_Laporan
+owner --> UC_Menu
+owner --> UC_Logout
+
+@enduml

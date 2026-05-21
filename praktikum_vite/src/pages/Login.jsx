@@ -35,7 +35,7 @@ function Login() {
     <div style={{ backgroundColor: '#121212', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         
-        <h2 style={{ color: '#FF5722', margin: '0 0 5px 0', fontWeight: 'bold', fontFamily: 'sans-serif' }}>Warmindo Digital</h2>
+        <h2 style={{ color: '#FF5722', margin: '0 0 5px 0', fontWeight: 'bold', fontFamily: 'sans-serif' }}>MieAyamin</h2>
         <p style={{ color: '#666', fontSize: '14px', marginBottom: '25px', fontFamily: 'sans-serif' }}>Silakan login untuk masuk ke sistem</p>
 
         <form onSubmit={handleLogin}>

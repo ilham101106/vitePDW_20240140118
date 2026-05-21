@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from './context/AuthContext.jsx'
 import './App.css'
 
@@ -9,6 +9,8 @@ import LaporanSells from "./pages/owner/LaporanSells.jsx";
 
 import POS from "./pages/kasir/POS.jsx";
 import FeedbackCustomer from "./pages/kasir/FeedbackCustomer.jsx";
+// 1. REVISI: Tambahkan import file KatalogMenu kasir di sini
+import KatalogMenu from "./pages/kasir/KatalogMenu.jsx";
 
 function App() {
   const { user, login, logout } = useAuth();
@@ -18,32 +20,37 @@ function App() {
   const [activeTab, setActiveTab] = useState('dashboard'); 
   const [activeTabKasir, setActiveTabKasir] = useState('pos'); 
 
+  // State global sementara untuk sinkronisasi transaksi via localStorage
+  const [globalTransactions, setGlobalTransactions] = useState([]);
+
+  useEffect(() => {
+    const savedTx = localStorage.getItem('mieayamin_transactions');
+    if (savedTx) {
+      setGlobalTransactions(JSON.parse(savedTx));
+    }
+  }, [user]);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
-    // Fungsi login ini akan menembak ke fungsi login async yang ada di AuthContext
     const result = await login(username, password);
     
     if (result && result.success) {
-      // Menentukan tab aktif awal berdasarkan role yang dikembalikan dari API
       if (result.role === 'OWNER') {
         setActiveTab('dashboard');
       } else if (result.role === 'KARYAWAN') {
         setActiveTabKasir('pos');
       }
-      
-      // Reset form input setelah berhasil login
       setUsername('');
       setPassword('');
     }
   };
 
-  // 1. LOGIN INTERFACE (Ditampilkan jika user belum login / null)
+  // 1. LOGIN INTERFACE
   if (!user) {
     return (
       <div className="login-container" style={{ backgroundColor: '#121212', minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div className="login-card" style={{ backgroundColor: '#fff', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ color: '#FF5722', margin: '0 0 5px 0', fontWeight: 'bold' }}>Warmindo Digital</h2>
+          <h2 style={{ color: '#FF5722', margin: '0 0 5px 0', fontWeight: 'bold' }}>MieAyamin</h2>
           <p style={{ color: '#666', fontSize: '14px', marginBottom: '25px' }}>Silakan login untuk masuk ke sistem</p>
           
           <form onSubmit={handleFormSubmit}>
@@ -84,12 +91,12 @@ function App() {
     );
   }
 
-  // 2. DASHBOARD OWNER (Ditampilkan jika user.role === 'OWNER')
+  // 2. DASHBOARD OWNER
   if (user.role === 'OWNER') {
     return (
       <div className="dashboard-layout">
         <aside className="sidebar">
-          <h3>Warmindo Digital</h3>
+          <h3>MieAyamin</h3>
           <span className="sidebar-role-owner">Owner Panel</span>
           <hr />
           <ul className="sidebar-menu sidebar-owner-menu">
@@ -118,12 +125,12 @@ function App() {
     );
   }
 
-  // 3. DASHBOARD KASIR (Ditampilkan jika user.role === 'KARYAWAN')
+  // 3. DASHBOARD KASIR
   if (user.role === 'KARYAWAN') {
     return (
       <div className="dashboard-layout">
         <aside className="sidebar">
-          <h3>Warmindo Digital</h3>
+          <h3>MieAyamin</h3>
           <span className="sidebar-role-kasir">Kasir Panel</span>
           <hr />
           <ul className="sidebar-menu sidebar-kasir-menu">
@@ -141,7 +148,8 @@ function App() {
           <div className="content-body">
             <div className="page-card">
               {activeTabKasir === 'pos' && <POS />}
-              {activeTabKasir === 'menu_view' && <MenuManagement isReadOnly={true} />}
+              {/* 2. REVISI: Ubah pemanggilan dari <MenuManagement /> ke <KatalogMenu /> */}
+              {activeTabKasir === 'menu_view' && <KatalogMenu />}
               {activeTabKasir === 'feedback' && <FeedbackCustomer />}
             </div>
           </div>

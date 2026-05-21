@@ -1,19 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 function DashboardOverview() {
-  // Data mock untuk simulasi tampilan ringkasan Warmindo
-  const stats = [
+  const [liveTransactions, setLiveTransactions] = useState([]);
+  const [stats, setStats] = useState([
     { id: 1, title: 'Pendapatan Hari Ini', value: 'Rp 1.250.000', change: '+15%', color: 'var(--lime-green)' },
     { id: 2, title: 'Porsi Terjual', value: '84 Porsi', change: 'Mie & Minuman', color: 'var(--princeton-orange)' },
     { id: 3, title: 'Total Transaksi', value: '42 Nota', change: 'Rata-rata Rp 30k', color: 'var(--blaze-orange)' },
     { id: 4, title: 'Feedback Positif', value: '96%', change: 'Dari 25 ulasan', color: 'var(--gold)' },
-  ];
+  ]);
 
-  const recentTransactions = [
-    { id: 'TRX-004', time: '17:15', items: '1x Mie Ayam, 1x Es Teh', total: 'Rp 41.000', status: 'Selesai' },
-    { id: 'TRX-003', time: '16:40', items: '1x Kwetiau, 1x Es Jeruk', total: 'Rp 23.000', status: 'Selesai' },
-    { id: 'TRX-002', time: '16:12', items: '3x Mie Yamin, 3x Es Jeruk', total: 'Rp 66.000', status: 'Selesai' },
-  ];
+  useEffect(() => {
+    // Membaca data transaksi riil dari kasir
+    const savedTx = localStorage.getItem('mieayamin_transactions');
+    if (savedTx) {
+      const parsedTx = JSON.parse(savedTx);
+      setLiveTransactions(parsedTx);
+
+      // Hitung total pendapatan otomatis dari data live kasir (Opsional Tambahan Nilai Plus!)
+      const liveRevenue = parsedTx.reduce((acc, curr) => {
+        const numericValue = parseInt(curr.total.replace(/[^0-8]/g, '')) || 0;
+        return acc + numericValue;
+      }, 0);
+
+      if (liveRevenue > 0) {
+        setStats(prev => prev.map(s => {
+          if (s.id === 1) return { ...s, value: `Rp ${liveRevenue.toLocaleString('id-ID')}` };
+          if (s.id === 3) return { ...s, value: `${parsedTx.length} Nota` };
+          return s;
+        }));
+      }
+    } else {
+      // Data default jika kasir belum melakukan transaksi sama sekali
+      setLiveTransactions([
+        { id: 'TRX-004', time: '17:15', items: '1x Mie Ayam, 1x Es Teh', total: 'Rp 41.000', status: 'Selesai' },
+        { id: 'TRX-003', time: '16:40', items: '1x Kwetiau, 1x Es Jeruk', total: 'Rp 23.000', status: 'Selesai' },
+        { id: 'TRX-002', time: '16:12', items: '3x Mie Yamin, 3x Es Jeruk', total: 'Rp 66.000', status: 'Selesai' },
+      ]);
+    }
+  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
@@ -59,7 +83,7 @@ function DashboardOverview() {
             </tr>
           </thead>
           <tbody>
-            {recentTransactions.map((trx) => (
+            {liveTransactions.map((trx) => (
               <tr key={trx.id} style={{ borderBottom: '1px solid #edf2f7' }}>
                 <td style={{ padding: '14px 12px', fontWeight: '600', fontSize: '14px', color: 'var(--blaze-orange)' }}>{trx.id}</td>
                 <td style={{ padding: '14px 12px', fontSize: '14px', color: '#4a5568' }}>{trx.time} WIB</td>
@@ -74,7 +98,7 @@ function DashboardOverview() {
                     fontSize: '12px',
                     fontWeight: '700'
                   }}>
-                    {trx.status}
+                    {trx.status || 'Selesai'}
                   </span>
                 </td>
               </tr>
