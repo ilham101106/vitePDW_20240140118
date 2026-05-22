@@ -26,12 +26,10 @@ function POS() {
   useEffect(() => {
     fetch('https://6a02ecf30d92f63dd254836f.mockapi.io/menu')
       .then(res => {
-        // Jika API 404 atau error, langsung lempar ke catch untuk pakai data lokal
         if (!res.ok) throw new Error("API belum siap atau 404");
         return res.json();
       })
       .then(data => {
-        // Proteksi berlapis: Pastikan responsenya beneran berbentuk Array
         if (Array.isArray(data) && data.length > 0) {
           setMenus(data);
         } else {
@@ -40,7 +38,7 @@ function POS() {
       })
       .catch((err) => {
         console.log("Menggunakan data fallback lokal karena:", err.message);
-        setMenus(defaultMenus); // Pake data lokal biar ga blank
+        setMenus(defaultMenus);
       });
   }, []);
 
@@ -63,13 +61,34 @@ function POS() {
     }).filter(Boolean));
   };
 
+  // LOGIKA BARU: Menyimpan data checkout beserta Alert info transaksi berhasil masuk
   const handleCheckout = () => {
     if (cart.length === 0) return;
-    alert("Transaksi Sukses! Nota Berhasil Dicetak.");
+
+    // Mengambil data nama kasir yang aktif dari variabel global window
+    const namaKasirAktif = window.currentUserActive || 'Eleonora79';
+
+    // Membuat kerangka objek data transaksi
+    const transaksiBaru = {
+      id: 'TX-' + Date.now(),
+      waktu: new Date().toLocaleString('id-ID'),
+      kasir: namaKasirAktif,
+      items: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price })),
+      total: totalPrice
+    };
+
+    // Eksekusi penyimpanan ke LocalStorage
+    const riwayatLama = JSON.parse(localStorage.getItem('mieayamin_transactions')) || [];
+    const riwayatBaru = [...riwayatLama, transaksiBaru];
+    localStorage.setItem('mieayamin_transactions', JSON.stringify(riwayatBaru));
+
+    // ALERT NOTIFIKASI TRANSAKSI MASUK
+    alert(`Transaksi Sukses!\nNota Berhasil Dicetak & Data Telah Disimpan ke Riwayat Panel Kasir.`);
+    
+    // Reset keranjang belanjaan menjadi kosong kembali
     setCart([]);
   };
 
-  // LOGIKA FILTER AMAN: Pastikan selalu berupa array sebelum di-filter
   const safeMenus = Array.isArray(menus) ? menus : defaultMenus;
 
   const filteredMenus = safeMenus.filter(item => {
@@ -115,7 +134,7 @@ function POS() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', maxHeight: '300px' }}>
             {cart.length === 0 ? <p style={{ color: '#a0aec0', fontSize: '14px', textAlign: 'center', marginTop: '20px' }}>Belum ada pesanan.</p> : 
               cart.map(item => (
-                <div key={item.id} style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
+                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '14px' }}>
                   <div style={{ maxWidth: '160px' }}>
                     <p style={{ fontWeight: '600' }}>{item.name}</p>
                     <span style={{ color: '#718096', fontSize: '12px' }}>Rp {parseInt(item.price || 0).toLocaleString('id-ID')}</span>
